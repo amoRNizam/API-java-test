@@ -1,0 +1,56 @@
+group 'API-java-test'
+version '1.0'
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.opengl-8080:assertjGen-gradle-plugin:2.0.0"
+    }
+}
+
+apply plugin: "com.github.opengl-BOBO.assertjGen2"
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    restAssuredVer = "4.0.0"
+    junitVer = "4.12"
+    gsonVer = "2.8.5"
+    allureVer = "2.11.0"
+    assertjVer = "3.5.2"
+}
+
+dependencies {
+    compile group: 'junit', name: 'junit', version: "$junitVer"
+    compile group: 'io.rest-assured', name: 'rest-assured', version: "$restAssuredVer"
+    compile group: 'com.google.code.gson', name: 'gson', version: "$gsonVer"
+    compile group: 'io.qameta.allure', name: 'allure-rest-assured', version: "$allureVer"
+    compile 'org.assertj:assertj-core:3.5.2'
+}
+
+// gradle assertJGen в терминале
+assertjGen {
+    packages = ['models']
+    targetDir = "src/main/java"
+
+    hierarchical = true
+    entryPointClassPackage = 'assertions'
+    generateAssertionsInPackage = 'assertions.search'
+    generateAssertionsForAllFields = true
+    generateBddAssertions = false
+    generateSoftAssertions = false
+    generateJUnitSoftAssertions = false
+}
